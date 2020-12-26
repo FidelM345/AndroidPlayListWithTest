@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AndroidPlaylist</string>
+    <string name="main_activity_name">Music Playlist</string>
+</resources>
