@@ -18,7 +18,9 @@ class PlaylistFragment : Fragment() {
 
     lateinit var viewModel: PlayListViewModel
     lateinit var viewModelFactory: PlayListViewModelFactory
-    private val repository: PlaylistRepository = PlaylistRepository()
+    private val playlistAPI:PlaylistAPI=object :PlaylistAPI{}
+    private val service:PlaylistService=PlaylistService(playlistAPI)
+    private val repository: PlaylistRepository = PlaylistRepository(service)
 
 
 
