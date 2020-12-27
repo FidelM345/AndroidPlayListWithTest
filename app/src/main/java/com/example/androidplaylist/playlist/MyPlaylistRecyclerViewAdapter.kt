@@ -22,9 +22,9 @@ class MyPlaylistRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.title.text = item.title
+        holder.title.text = item.name
         holder.category.text = item.category
-        holder.image.setImageResource(item.image)
+        holder.image.setImageResource(R.drawable.playlislogo)
     }
 
     override fun getItemCount(): Int = values.size

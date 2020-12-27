@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.androidplaylist.R
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * A fragment representing a list of Items.
@@ -18,8 +21,18 @@ class PlaylistFragment : Fragment() {
 
     lateinit var viewModel: PlayListViewModel
     lateinit var viewModelFactory: PlayListViewModelFactory
-    private val playlistAPI:PlaylistAPI=object :PlaylistAPI{}
-    private val service:PlaylistService=PlaylistService(playlistAPI)
+
+
+    private val retrofit=Retrofit.Builder()
+            .baseUrl("http://192.168.1.29:3000/")
+            .client(OkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+    private val api=retrofit.create(PlaylistAPI::class.java)
+
+   // private val playlistAPI:PlaylistAPI=object :PlaylistAPI{} was ued during testing passed as a parameter  to PlaylistService(playlistAPI)
+    private val service:PlaylistService=PlaylistService(api)
     private val repository: PlaylistRepository = PlaylistRepository(service)
 
 

@@ -4,7 +4,7 @@ import com.example.androidplaylist.R
 
 data class PlaylistItem (
         val id:String,
-        val title:String,
+        val name:String,
         val category:String,
-        val image:Int= R.drawable.playlislogo
+        val image:Int
 )

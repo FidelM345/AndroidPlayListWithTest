@@ -42,6 +42,7 @@ class PlayListFeature {
     @Test
     fun displayListOfPlaylists() {
 
+        Thread.sleep(4000)
 
 
        assertRecyclerViewItemCount(R.id.playlist_recycler, 10)
