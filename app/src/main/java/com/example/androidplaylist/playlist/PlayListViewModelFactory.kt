@@ -2,8 +2,9 @@ package com.example.androidplaylist.playlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 
-class PlayListViewModelFactory(
+class PlayListViewModelFactory @Inject constructor(
         private val repository: PlaylistRepository
 ) :ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

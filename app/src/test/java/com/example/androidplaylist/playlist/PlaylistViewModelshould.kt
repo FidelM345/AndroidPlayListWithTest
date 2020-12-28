@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 import org.junit.Assert.*
+import petros.efthymiou.groovy.utils.captureValues
 import petros.efthymiou.groovy.utils.getValueForTest
 import java.lang.RuntimeException
 
@@ -37,7 +38,7 @@ class PlaylistViewModelshould: BaseunitTest() {
        val viewModel= PlayListViewModel(repository)
 
 
-        //the getValueTest comes from InstantTaskExecutorRule
+        //the getValueTest comes from InstantTaskExecutorRule used for testing the live data
         viewModel.playlist.getValueForTest()
 
         verify(repository, times(1)).getPlaylists()
@@ -61,11 +62,7 @@ class PlaylistViewModelshould: BaseunitTest() {
     @Test
     fun `emit error when it receives an error`()= runBlockingTest{
 
-        whenever(repository.getPlaylists()).thenReturn(
-                flow {
-                    emit(Result.failure<List<PlaylistItem>>(exception))
-                }
-        )
+        mockErrorCase()
 
 
 
@@ -77,6 +74,79 @@ class PlaylistViewModelshould: BaseunitTest() {
 
     }
 
+
+
+    @Test
+    fun `show spinner while loading`()= runBlockingTest {
+
+        //whenever we use a mocked object and its methods return a result then we have to mock the methods also.
+        //that is why we are using the   mockSuccesfulcase() here
+        mockSuccesfulcase()
+
+
+        val viewModel:PlayListViewModel= PlayListViewModel(repository)
+
+        //the capture command is also from the liveData util file
+        viewModel.loader.captureValues{
+
+            //we force the live data to emit results using the getValueForTest()
+            viewModel.playlist.getValueForTest()
+            //values array is from the LiveData Util file
+            //we the assert that the first value emitted is true
+            assertEquals(true,values[0])
+        }
+
+    }
+
+    @Test
+    fun `should close loader after playlist loads`()= runBlockingTest{
+
+        //whenever we use a mocked object and its methods return a result then we have to mock the methods also.
+        //that is why we are using the   mockSuccesfulcase() here
+        mockSuccesfulcase()
+
+        val viewModel:PlayListViewModel= PlayListViewModel(repository)
+
+        viewModel.loader.captureValues {
+            viewModel.playlist.getValueForTest()
+
+            assertEquals(false,values.last())
+        }
+
+
+
+
+    }
+
+
+    @Test
+    fun `should close loader after every error case`()= runBlockingTest{
+
+        //whenever we use a mocked object and its methods return a result then we have to mock the methods also.
+        //that is why we are using the   mockSuccesfulcase() here
+        mockErrorCase()
+
+        val viewModel:PlayListViewModel= PlayListViewModel(repository)
+
+        viewModel.loader.captureValues {
+            viewModel.playlist.getValueForTest()
+
+            assertEquals(false,values.last())
+        }
+
+
+
+
+    }
+
+
+    private suspend fun mockErrorCase() {
+        whenever(repository.getPlaylists()).thenReturn(
+            flow {
+                emit(Result.failure<List<PlaylistItem>>(exception))
+            }
+        )
+    }
 
 
     private fun TestCoroutineScope.mockSuccesfulcase() {

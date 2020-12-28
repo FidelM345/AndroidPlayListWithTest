@@ -1,6 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
+
+    //used by dagger hilt
+    id 'kotlin-kapt' //hilt kotlin annotation processor
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -81,4 +86,12 @@ dependencies {
     androidTestImplementation('com.schibsted.spain:barista:3.7.0') {
         exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
     }
+
+//dependency for dagger hilt
+    implementation "com.google.dagger:hilt-android:2.28-alpha"
+    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
+
+
+
+
 }
