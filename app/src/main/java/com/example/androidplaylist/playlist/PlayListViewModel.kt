@@ -1,5 +1,6 @@
 package com.example.androidplaylist.playlist
 
+import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -34,6 +35,7 @@ class PlayListViewModel (
     val playlist= liveData<Result<List<PlaylistItem>>> {
         loader.postValue(true)
 
+      //  Log.i("mato", "viewmodel playlist size = ${repository.getPlaylists().collect{it.getOrNull()!!.size}} ")
         emitSource(repository.getPlaylists()
                 //on each flow emitted we need to close the loader
             .onEach {

@@ -1,6 +1,7 @@
 package com.example.androidplaylist.playlist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -64,7 +65,7 @@ class PlaylistFragment : Fragment() {
         })
 
         viewModel.playlist.observe(this as LifecycleOwner,{playlistitems->
-
+            Log.i("mato", "list item size =: ${playlistitems.getOrNull()}")
             if (playlistitems.getOrNull() !=null)
                 setUpList(view.playlist_recycler, playlistitems.getOrNull()!!)
             else{
@@ -80,6 +81,7 @@ class PlaylistFragment : Fragment() {
         //casting the view to a recycler view
         with(view as RecyclerView) {
             layoutManager = LinearLayoutManager(context)
+            Log.i("mato", "list item size =: ${playlistitems.size}")
             adapter = MyPlaylistRecyclerViewAdapter(playlistitems)
         }
     }
@@ -93,9 +95,7 @@ class PlaylistFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() =
-            PlaylistFragment().apply {
-
-            }
+            PlaylistFragment()
     }
 }
 

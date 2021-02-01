@@ -19,11 +19,13 @@ class PlaylistRepoShould :BaseunitTest(){
     private val service:PlaylistService=mock()
     private  val playlists= mock<List<PlaylistItem>>()
     private val exception=RuntimeException("something went wrong")
+    private val playlistRaw= mock<List<PlaylistRaw>>()
+    private val mapper:PlaylistMapper= mock()
 
 
     @Test
     fun `get play list from service`()= runBlockingTest{
-        val  repository=PlaylistRepository(service)
+        val  repository=PlaylistRepository(service,mapper)
 
         repository.getPlaylists()
 
@@ -32,33 +34,62 @@ class PlaylistRepoShould :BaseunitTest(){
 
 
     @Test
-    fun `emit play list from service`()= runBlockingTest{
+    fun `emit mapped play list from service`()= runBlockingTest{
 
-        whenever(service.fetchPlaylist()).thenReturn(
-                flow {
-                    emit(Result.success(playlists))
-                }
-        )
+        mockSuccesfulcase()
 
-        val repository=PlaylistRepository(service)
+        val repository=PlaylistRepository(service,mapper)
 
 
         assertEquals(playlists,repository.getPlaylists().first().getOrNull())
     }
 
 
+
+
     @Test
     fun propagateErrors()= runBlockingTest{
-        whenever(service.fetchPlaylist()).thenReturn(
-                flow {
-                    emit(Result.failure<List<PlaylistItem>>(exception))
-                }
-        )
-
-        val repository=PlaylistRepository(service)
+        val repository = mockErrorcase()
 
         assertEquals(exception,repository.getPlaylists().first().exceptionOrNull())
 
+    }
+
+
+    @Test
+    fun `delegate the business logic to mapper`()= runBlockingTest{
+        mockSuccesfulcase()
+
+        val repository=PlaylistRepository(service,mapper)
+
+        //when we get the first emissions
+        repository.getPlaylists().first()
+
+        verify(mapper, times(1)).invoke(playlistRaw)
+
+    }
+
+
+    private suspend fun mockSuccesfulcase() {
+        whenever(service.fetchPlaylist()).thenReturn(
+            flow {
+                emit(Result.success(playlistRaw))
+            }
+        )
+        whenever(mapper.invoke(playlistRaw)).thenReturn(playlists)
+    }
+
+    private suspend fun mockErrorcase(): PlaylistRepository {
+        whenever(service.fetchPlaylist()).thenReturn(
+            flow {
+                emit(Result.failure<List<PlaylistRaw>>(exception))
+            }
+        )
+
+
+
+        val repository = PlaylistRepository(service,mapper)
+        return repository
     }
 
 

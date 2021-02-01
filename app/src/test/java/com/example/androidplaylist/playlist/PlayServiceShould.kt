@@ -15,7 +15,7 @@ class PlayServiceShould {
 
    private val playlistApi:PlaylistAPI=mock()
 
-    private  val playlists:List<PlaylistItem> =mock()
+    private  val playlists:List<PlaylistRaw> =mock()
     private val exception=RuntimeException("something went wrong")
     @Test
     fun `fetch all playlists from playlist api`()= runBlockingTest{

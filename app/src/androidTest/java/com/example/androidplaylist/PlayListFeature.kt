@@ -3,11 +3,13 @@ package com.example.androidplaylist
 import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import com.example.androidplaylist.playlist.resource
 import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
@@ -26,7 +28,7 @@ import org.junit.Rule
 
 
 @RunWith(AndroidJUnit4::class)
-class PlayListFeature {
+class PlayListFeature :BaseUITest(){
 
     //the rule tells the test to target the MainActivity class
     val  mActivityRule=ActivityTestRule(MainActivity::class.java)
@@ -43,7 +45,7 @@ class PlayListFeature {
     @Test
     fun displayListOfPlaylists() {
 
-        Thread.sleep(4000)
+        //Thread.sleep(4000)
 
 
        assertRecyclerViewItemCount(R.id.playlist_recycler, 10)
@@ -57,26 +59,31 @@ class PlayListFeature {
             .check(matches(withText("rock")))
             .check(matches(isDisplayed()))
 
-        onView(allOf(withId(R.id.play_list_image), isDescendantOfA(nthChildOf(withId(R.id.playlist_recycler),0))))
+        onView(allOf(withId(R.id.play_list_image), isDescendantOfA(nthChildOf(withId(R.id.playlist_recycler),1))))
             .check(matches(withDrawable(R.drawable.playlislogo)))
             .check(matches(isDisplayed()))
     }
 
     @Test
     fun displayLoaderWhileFetchingPlaylist(){
+
+        //it ensures the assertion is not blocked while waiting for response from th e database
+        IdlingRegistry.getInstance().unregister(resource)
+
         assertDisplayed(R.id.loader)
     }
 
     @Test
     fun hidesLoader(){
-        Thread.sleep(4000)
+      //  Thread.sleep(4000)
+
         assertNotDisplayed(R.id.loader)
     }
 
     @Test
     fun displayRockimageForRocklistItems(){
 
-        Thread.sleep(4000)
+     //   Thread.sleep(4000)
 
         onView(allOf(withId(R.id.play_list_image), isDescendantOfA(nthChildOf(withId(R.id.playlist_recycler),0))))
             .check(matches(withDrawable(R.drawable.rock)))

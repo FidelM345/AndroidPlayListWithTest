@@ -1,5 +1,6 @@
 package com.example.androidplaylist.playlist
 
+import com.jakewharton.espresso.OkHttp3IdlingResource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,14 +10,19 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
+
+val client=OkHttpClient()
+val resource = OkHttp3IdlingResource.create("OkHttp", client);
+
+
 @Module
 @InstallIn(FragmentComponent::class)
 class Playlismodule {
 
     @Provides
     fun retrofit():Retrofit=Retrofit.Builder()
-        .baseUrl("http://192.168.1.29:3000/")
-        .client(OkHttpClient())
+        .baseUrl("http://192.168.1.28:3000/")
+        .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
