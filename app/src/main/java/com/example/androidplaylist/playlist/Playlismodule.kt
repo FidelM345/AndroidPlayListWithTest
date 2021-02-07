@@ -21,7 +21,7 @@ class Playlismodule {
 
     @Provides
     fun retrofit():Retrofit=Retrofit.Builder()
-        .baseUrl("http://192.168.1.28:3000/")
+        .baseUrl("http://192.168.1.43:3000/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

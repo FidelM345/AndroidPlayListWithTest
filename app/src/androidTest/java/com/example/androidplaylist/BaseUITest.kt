@@ -12,6 +12,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 abstract class BaseUITest {
 
+
+
     @Before
     fun setup(){
         IdlingRegistry.getInstance().register(resource)

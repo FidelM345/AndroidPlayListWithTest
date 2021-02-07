@@ -10,7 +10,8 @@ import com.example.androidplaylist.R
 
 
 class MyPlaylistRecyclerViewAdapter(
-        val values: List<PlaylistItem>
+        val values: List<PlaylistItem>,
+        private val listener:(String)->Unit
 
 ) : RecyclerView.Adapter<MyPlaylistRecyclerViewAdapter.ViewHolder>() {
 
@@ -25,6 +26,7 @@ class MyPlaylistRecyclerViewAdapter(
         holder.title.text = item.name
         holder.category.text = item.category
         holder.image.setImageResource(item.image)
+        holder.root.setOnClickListener { listener(item.id) }
     }
 
     override fun getItemCount(): Int = values.size
@@ -33,6 +35,7 @@ class MyPlaylistRecyclerViewAdapter(
         val title: TextView = view.findViewById(R.id.play_list_title)
         val category: TextView = view.findViewById(R.id.play_list_category)
         val image: ImageView = view.findViewById(R.id.play_list_image)
+        val root:View=view.findViewById(R.id.playlist_item_root)
 
 
     }

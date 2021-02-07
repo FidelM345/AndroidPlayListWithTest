@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
@@ -67,7 +68,7 @@ class PlayListFeature :BaseUITest(){
     @Test
     fun displayLoaderWhileFetchingPlaylist(){
 
-        //it ensures the assertion is not blocked while waiting for response from th e database
+        //it ensures the assertion is not blocked while waiting for response from the database
         IdlingRegistry.getInstance().unregister(resource)
 
         assertDisplayed(R.id.loader)
@@ -92,6 +93,18 @@ class PlayListFeature :BaseUITest(){
         onView(allOf(withId(R.id.play_list_image), isDescendantOfA(nthChildOf(withId(R.id.playlist_recycler),3))))
             .check(matches(withDrawable(R.drawable.rock)))
             .check(matches(isDisplayed()))
+
+    }
+
+
+
+    @Test
+    fun  navigateToDetailsScreen(){
+        onView(allOf(withId(R.id.play_list_image), isDescendantOfA(nthChildOf(withId(R.id.playlist_recycler),0))))
+                .perform(click())
+
+        assertDisplayed(R.id.playlist_detials_root)
+
 
     }
 

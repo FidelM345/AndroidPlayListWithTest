@@ -12,12 +12,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //To not add the fragment twice,
+  /*      //To not add the fragment twice,
         if (savedInstanceState==null){
             //starts a new Fragment
             supportFragmentManager.beginTransaction()
                 .add(R.id.container, PlaylistFragment.newInstance())
                 .commit()
-        }
+        }*/
+
+
     }
 }

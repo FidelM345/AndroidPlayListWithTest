@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
 import com.example.androidplaylist.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_playlist.*
@@ -31,7 +33,6 @@ class PlaylistFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: PlayListViewModelFactory
 
-
     /*private val retrofit=Retrofit.Builder()
             .baseUrl("http://192.168.1.29:3000/")
             .client(OkHttpClient())
@@ -46,14 +47,15 @@ class PlaylistFragment : Fragment() {
 */
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_playlist, container, false)
 
+
         setUpViewModel()
+
 
         viewModel.loader.observe(this as LifecycleOwner,{loading->
 
@@ -63,6 +65,8 @@ class PlaylistFragment : Fragment() {
             }
 
         })
+
+
 
         viewModel.playlist.observe(this as LifecycleOwner,{playlistitems->
             Log.i("mato", "list item size =: ${playlistitems.getOrNull()}")
@@ -82,9 +86,18 @@ class PlaylistFragment : Fragment() {
         with(view as RecyclerView) {
             layoutManager = LinearLayoutManager(context)
             Log.i("mato", "list item size =: ${playlistitems.size}")
-            adapter = MyPlaylistRecyclerViewAdapter(playlistitems)
+            adapter = MyPlaylistRecyclerViewAdapter(playlistitems) { id ->
+
+                val action: NavDirections =
+                    PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistDetailFragment(id) //the classes are auto generated and must be build first before they are used
+
+                findNavController().navigate(action)
+            }
         }
     }
+
+
+
 
     private fun setUpViewModel() {
 //        viewModelFactory = PlayListViewModelFactory(repository)//initializing viewmodel factory provider
